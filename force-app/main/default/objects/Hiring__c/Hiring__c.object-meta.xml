@@ -149,17 +149,17 @@
     <enableHistory>false</enableHistory>
     <enableLicensing>false</enableLicensing>
     <enableReports>true</enableReports>
-    <enableSearch>true</enableSearch>
+    <enableSearch>false</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
-    <externalSharingModel>ReadWrite</externalSharingModel>
-    <label>Position</label>
+    <externalSharingModel>ControlledByParent</externalSharingModel>
+    <label>Hiring</label>
     <nameField>
-        <label>Position Name</label>
+        <label>Hiring Name</label>
         <type>Text</type>
     </nameField>
-    <pluralLabel>Positions</pluralLabel>
+    <pluralLabel>Hirings</pluralLabel>
     <searchLayouts></searchLayouts>
-    <sharingModel>ReadWrite</sharingModel>
+    <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>
