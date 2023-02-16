@@ -1,21 +1,17 @@
 {
-    "orgName": "Nitesh TV",
-    "edition": "Developer",
-    "features": [
-        "EnableSetPasswordInApi",
-        "Communities",
-        "ServiceCloud",
-        "Chatbot",
-        "Knowledge",
-        "LegacyLiveAgentRouting",
-        "LiveAgent"
-    ],
-    "settings": {
-        "lightningExperienceSettings": {
-            "enableS1DesktopEnabled": true
-        },
-        "mobileSettings": {
-            "enableS1EncryptedStoragePref2": false
-        }
+  "orgName": "Nitesh TV",
+  "edition": "Developer",
+  "features": [
+    "EnableSetPasswordInApi",
+    "Communities",
+    "ServiceCloud"
+  ],
+  "settings": {
+    "lightningExperienceSettings": {
+      "enableS1DesktopEnabled": true
+    },
+    "mobileSettings": {
+      "enableS1EncryptedStoragePref2": false
     }
+  }
 }
