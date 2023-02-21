@@ -81,7 +81,7 @@
         <inputAssignments>
             <field>WhoId</field>
             <value>
-                <elementReference>Get_contact.Account.Id</elementReference>
+                <elementReference>Get_contact.Account.Owner.Id</elementReference>
             </value>
         </inputAssignments>
         <object>Task</object>
@@ -122,9 +122,16 @@
                 <stringValue>New</stringValue>
             </value>
         </filters>
+        <filters>
+            <field>ContactId</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
         <object>Case</object>
         <recordTriggerType>Create</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
 </Flow>
