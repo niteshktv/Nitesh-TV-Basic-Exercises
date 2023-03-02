@@ -5,9 +5,7 @@
         "EnableSetPasswordInApi",
         "Communities",
         "ServiceCloud",
-        "Chatbot",
         "Knowledge",
-        "LegacyLiveAgentRouting",
         "LiveAgent"
     ],
     "settings": {
