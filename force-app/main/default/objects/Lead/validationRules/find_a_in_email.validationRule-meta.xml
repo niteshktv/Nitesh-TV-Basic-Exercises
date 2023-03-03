@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>find_a_in_email</fullName>
+    <active>true</active>
+    <errorConditionFormula>CONTAINS( MID( Email , 5, 8) , &quot;a&quot;)</errorConditionFormula>
+    <errorMessage>there is a character ‘a’ in Email field between the 5th character and the 12th character</errorMessage>
+</ValidationRule>
