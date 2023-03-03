@@ -3,6 +3,6 @@
     <fullName>email_not_end_with_specific_domain</fullName>
     <active>true</active>
     <description>Lead email should not end with .games, .glass, .free, .talk, .garden</description>
-    <errorConditionFormula>OR(RIGHT(Email,LEN(Email)-FIND(&apos;.&apos;,Email)+1) = &quot;.games&quot;,RIGHT(Email,LEN(Email)-FIND(&apos;.&apos;,Email)+1) = &quot;.talk&quot;,RIGHT(Email,LEN(Email)-FIND(&apos;.&apos;,Email)+1) = &quot;.free&quot;,RIGHT(Email,LEN(Email)-FIND(&apos;.&apos;,Email)+1) = &quot;.glass&quot;,RIGHT(Email,LEN(Email)-FIND(&apos;.&apos;,Email)+1) = &quot;.garden&quot;)</errorConditionFormula>
+    <errorConditionFormula>OR(RIGHT(Email,6) = &quot;.games&quot;,RIGHT(Email,5)=&quot;.talk&quot;,RIGHT(Email,5) = &quot;.free&quot;,RIGHT(Email,6) = &quot;.glass&quot;,RIGHT(Email,7) = &quot;.garden&quot;)</errorConditionFormula>
     <errorMessage>Lead email should not end with .games, .glass, .free, .talk, .garden</errorMessage>
 </ValidationRule>

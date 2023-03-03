@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>57.0</apiVersion>
+    <assignments>
+        <name>Append_Email_with_Z</name>
+        <label>Append Email with Z</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Email</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>newEmail</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
     <decisions>
         <name>Check_Email_Length</name>
         <label>Check Email Length</label>
@@ -18,7 +31,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Update_lead_email</targetReference>
+                <targetReference>Append_Email_with_Z</targetReference>
             </connector>
             <label>Length less than 20</label>
         </rules>
@@ -56,19 +69,6 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
-    <recordUpdates>
-        <name>Update_lead_email</name>
-        <label>Update lead email</label>
-        <locationX>50</locationX>
-        <locationY>431</locationY>
-        <inputAssignments>
-            <field>Email</field>
-            <value>
-                <elementReference>newEmail</elementReference>
-            </value>
-        </inputAssignments>
-        <inputReference>$Record</inputReference>
-    </recordUpdates>
     <start>
         <locationX>56</locationX>
         <locationY>0</locationY>
