@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Customer_Info__c</fullName>
+    <externalId>false</externalId>
+    <label>Customer Info</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Demo 1</fullName>
+                <default>false</default>
+                <label>Demo 1</label>
+            </value>
+            <value>
+                <fullName>Demo 2</fullName>
+                <default>false</default>
+                <label>Demo 2</label>
+            </value>
+            <value>
+                <fullName>Demo 3</fullName>
+                <default>false</default>
+                <label>Demo 3</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

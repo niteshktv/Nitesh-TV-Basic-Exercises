@@ -126,6 +126,11 @@
         <field>Lead.Website</field>
         <readable>false</readable>
     </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Opportunity.Customer_Info__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
     <layoutAssignments>
         <layout>College__c-College Layout</layout>
     </layoutAssignments>
