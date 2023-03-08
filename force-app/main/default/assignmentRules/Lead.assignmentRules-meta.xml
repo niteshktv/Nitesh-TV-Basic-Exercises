@@ -4,11 +4,11 @@
         <fullName>Lead Assignment</fullName>
         <active>true</active>
         <ruleEntry>
-            <assignedTo>test-gn5plm3bvd7k@example.com</assignedTo>
-            <assignedToType>User</assignedToType>
+            <assignedTo>Marketing_Hot_Leads</assignedTo>
+            <assignedToType>Queue</assignedToType>
             <criteriaItems>
                 <field>Lead.City</field>
-                <operation>equals</operation>
+                <operation>contains</operation>
                 <value>Dallas</value>
             </criteriaItems>
             <criteriaItems>

@@ -181,7 +181,7 @@
             <targetReference>Check_Zip_Code</targetReference>
         </connector>
         <object>Account</object>
-        <recordTriggerType>Create</recordTriggerType>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
