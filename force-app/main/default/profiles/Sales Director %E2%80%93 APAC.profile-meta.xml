@@ -78,6 +78,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Lead.LeadEmail__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Lead.LeadSource</field>
         <readable>false</readable>
     </fieldPermissions>
@@ -116,6 +121,12 @@
         <field>Lead.Website</field>
         <readable>false</readable>
     </fieldPermissions>
+    <layoutAssignments>
+        <layout>College__c-College Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Student__c-Student Layout</layout>
+    </layoutAssignments>
     <tabVisibilities>
         <tab>standard-Lead</tab>
         <visibility>Hidden</visibility>
