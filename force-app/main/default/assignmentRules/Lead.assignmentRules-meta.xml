@@ -6,6 +6,7 @@
         <ruleEntry>
             <assignedTo>Marketing_Hot_Leads</assignedTo>
             <assignedToType>Queue</assignedToType>
+            <booleanFilter>1 OR 2</booleanFilter>
             <criteriaItems>
                 <field>Lead.City</field>
                 <operation>contains</operation>
