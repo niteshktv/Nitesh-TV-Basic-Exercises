@@ -1,29 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>57.0</apiVersion>
-    <decisions>
-        <name>Stage_is_Changed</name>
-        <label>Stage is Changed</label>
-        <locationX>182</locationX>
-        <locationY>335</locationY>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Changed_to_Close_Won</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.StageName</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Closed Won</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Create_Contract_Record</targetReference>
-            </connector>
-            <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
-            <label>Changed to Close Won</label>
-        </rules>
-    </decisions>
     <environments>Default</environments>
     <formulas>
         <name>ContractTermTime</name>
@@ -60,8 +37,8 @@
     <recordCreates>
         <name>Create_Contract_Record</name>
         <label>Create Contract Record</label>
-        <locationX>50</locationX>
-        <locationY>455</locationY>
+        <locationX>176</locationX>
+        <locationY>335</locationY>
         <assignRecordIdToReference>contractID</assignRecordIdToReference>
         <connector>
             <targetReference>Update_Contract_Status</targetReference>
@@ -95,8 +72,8 @@
     <recordUpdates>
         <name>Update_Contract_Status</name>
         <label>Update Contract Status</label>
-        <locationX>50</locationX>
-        <locationY>575</locationY>
+        <locationX>176</locationX>
+        <locationY>455</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -114,17 +91,18 @@
         <object>Contract</object>
     </recordUpdates>
     <start>
-        <locationX>56</locationX>
+        <locationX>50</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Stage_is_Changed</targetReference>
+            <targetReference>Create_Contract_Record</targetReference>
         </connector>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
         <filterLogic>and</filterLogic>
         <filters>
             <field>StageName</field>
-            <operator>IsChanged</operator>
+            <operator>EqualTo</operator>
             <value>
-                <booleanValue>true</booleanValue>
+                <stringValue>Closed Won</stringValue>
             </value>
         </filters>
         <object>Opportunity</object>
