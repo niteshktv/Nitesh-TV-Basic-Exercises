@@ -42,5 +42,23 @@ private class LeadTriggerHandlerTest{
         }
         System.assertEquals(0, [SELECT Id FROM Lead].size());
     }
+    @isTest static void EndDomainTest(){
+        Lead lead1 = new Lead(LastName='Singh',Company='Thinkvibes', Email='mohit.singh@thinkvibes.garden');
+        try{
+            insert lead1;
+        }catch(Exception e){
+            System.assertEquals('System.DmlException', e.getTypeName());
+        }
+        System.assertEquals(0, [SELECT Id FROM Lead].size());
+    }
+    @isTest static void StartDomainTest(){
+        Lead lead1 = new Lead(LastName='Singh',Company='Thinkvibes', Email='Info@thinkvibes.com');
+        try{
+            insert lead1;
+        }catch(Exception e){
+            System.assertEquals('System.DmlException', e.getTypeName());
+        }
+        System.assertEquals(0, [SELECT Id FROM Lead].size());
+    }
     
 }
