@@ -1,3 +1,3 @@
-trigger LeadTrigger on Lead (after insert, after update) {
+trigger LeadTrigger on Lead (before insert, before update) {
 	LeadTriggerHandler.beforeInsert(Trigger.new);
 }
