@@ -4,7 +4,7 @@
     <category>opportunities</category>
     <deployed>false</deployed>
     <description>Auto add fields</description>
-    <label>Auto add fields</label>
+    <label>Opportunity Report Type</label>
     <sections>
         <columns>
             <checkedByDefault>false</checkedByDefault>
