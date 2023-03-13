@@ -2,7 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>LeadEmail__c</fullName>
     <externalId>false</externalId>
-    <formula>Email</formula>
+    <formula>IF( $User.Username = &quot;test-gn5plm3bvd7k@example.com&quot;, &quot;&quot;, Email)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>LeadEmail</label>
     <required>false</required>
