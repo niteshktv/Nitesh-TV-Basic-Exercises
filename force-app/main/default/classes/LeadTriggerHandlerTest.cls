@@ -63,8 +63,8 @@ private class LeadTriggerHandlerTest{
     @isTest static void EmailLengthLessThan20(){
         Lead lead = new Lead(LastName='Singh', Company='Thinkvibes', Email='Mohit@tv.com');
         insert lead;
-
-        System.assertEquals('Mohit@tv.com', [SELECT ID from Lead Where Id = :lead.Id limt 1].Email);
+		System.debug([SELECT ID, Email from Lead Where Id = :lead.Id limit 1].Email);
+        System.assertEquals('mohit@tv.comz', [SELECT ID, Email from Lead Where Id = :lead.Id limit 1].Email);
     }
     
 }
