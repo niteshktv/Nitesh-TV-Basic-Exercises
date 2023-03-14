@@ -1,18 +1,31 @@
 public class LeadTriggerHandler {
+    //After Insert or  Update
     public static void checkAfterLead(List<Lead> leadList){
         for(Lead lead : leadList){
-            if(lead.Country__c == 'United States' && (lead.Phone == null || string.valueOf(lead.Phone).length() < 10)){
+            // Exercise-1 Point-1
+            if(lead.Country__c == 'United States' && (lead.Phone == null || string.ValueOf(lead.Phone).length() < 10)){
                 lead.addError('Phone should be of 10 characters');
-            }else if(lead.Email == null && lead.Phone == null){
+            }
+            // Exercise-1 Point-2
+            if(lead.Email == null && lead.Phone == null){
                 lead.addError('Either email or phone is required');
-            }else if(checkLastDomain(lead)){
+            }
+            // Exercise-2 Point-1
+            if(checkLastDomain(lead)){
                 lead.addError('Email Can not ends with .games, .garden, .glass, .free, .talk ');
-            }else if(checkStartDomain(lead)){
+            }
+            // Exercise-2 Point-2
+            if(checkStartDomain(lead)){
                 lead.addError('Email Can not starts with Career@, contact@, info@');
+            }
+            // Exercise-4 point-1
+            if(Lead.LeadSource == null){
+                lead.addError('Enter a lead source');
             }
         }
     }
 
+    // Exercise-2 Point-1
     public static boolean checkLastDomain(Lead lead){
         String[] domains = new String[]{'.games', '.garden', '.glass', '.free', '.talk'};
         for(String domain  : domains){
@@ -22,6 +35,7 @@ public class LeadTriggerHandler {
         }
         return false;
     }
+    // Exercise-2 Point-2
     public static boolean checkStartDomain(Lead lead){
         String[] domains = new String[]{'info@', 'contact@', 'Career@'};
         for(String domain  : domains){
@@ -32,6 +46,7 @@ public class LeadTriggerHandler {
         return false;
     }
 
+    // // Exercise-3
     public static void checkBeforeLead(List<Lead> leadList){
         for(Lead lead :  leadList){
             checkLeadEmail(lead);
@@ -43,5 +58,34 @@ public class LeadTriggerHandler {
             lead.Email = lead.Email + 'z';
         }
     }
+
+    //Exercise-4 Point-2
+    public static void addCampaginToLead(List<Lead> leadList){
+        Set<String> leadSource = new Set<String>();
+
+        for(Lead lead : leadList){
+            if(lead.LeadSource != null){
+                leadSource.add(lead.LeadSource);
+            }
+        }
+
+        List<Campaign> campaignList = [SELECT ID, Name FROM Campaign WHERE Name IN :leadSource ];
+
+        Map<String, Campaign> campaignMap = new Map<String, Campaign>();
+        for(Campaign campaign : campaignList){
+            campaignMap.put(campaign .Name, campaign);
+        }
+
+        List<CampaignMember> campaignMemberList = new List<CampaignMember>();
+        for(Lead lead : leadList){
+            if(lead.LeadSource != null && campaignMap.containsKey(lead.LeadSource)){
+                campaignMemberList.add(new CampaignMember(CampaignId = campaignMap.get(lead.LeadSource).Id, LeadId = lead.Id, Status = 'sent'));
+            }
+        }
+        insert campaignMemberList;
+
+    }
+    
+    
     
 }
