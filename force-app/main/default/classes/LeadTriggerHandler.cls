@@ -22,6 +22,10 @@ public class LeadTriggerHandler {
             if(Lead.LeadSource == null){
                 lead.addError('Enter a lead source');
             }
+            //Exercise-5 point-1
+            if(aBeetween5To12(lead)){
+                lead.addError('character "a" in the Lead objects Email field between the 5th character and the 12th character');
+            }
         }
     }
 
@@ -86,6 +90,13 @@ public class LeadTriggerHandler {
 
     }
     
+    //Exercise-5 Point-1
+    private static boolean aBeetween5To12(Lead lead){
+            if(lead.Email != null && lead.Email.length() > 12 && lead.Email.substring(4, 12).contains('a')){
+                return true;
+            }
+        return false;
+    }
     
     
 }

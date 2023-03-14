@@ -129,4 +129,15 @@ private class LeadTriggerHandlerTest{
          insert leads;
         System.assertEquals(6, [Select ID from CampaignMember].size());
     }
+
+    // Exercise-5 Point-1 Test
+    @isTest static void aBeetween5To12(){
+        Lead lead = new Lead(LastName='Singh', Company='Thinkvibes', Email='Mohit.kumawat@tv.com', LeadSource = 'Web');
+        try{
+            insert lead;
+        }catch(Exception e){
+            System.assertEquals('System.DmlException', e.getTypeName());
+        }
+        System.assertEquals(0, [Select Id from Lead].size());
+    }
 }
