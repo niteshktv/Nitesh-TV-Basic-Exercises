@@ -1,5 +1,5 @@
 public class LeadTriggerHandler {
-    public static void checkLead(List<Lead> leadList){
+    public static void checkAfterLead(List<Lead> leadList){
         for(Lead lead : leadList){
             if(lead.Country__c == 'United States' && (lead.Phone == null || string.valueOf(lead.Phone).length() < 10)){
                 lead.addError('Phone should be of 10 characters');
@@ -31,4 +31,17 @@ public class LeadTriggerHandler {
         }
         return false;
     }
+
+    public static void checkBeforeLead(List<Lead> leadList){
+        for(Lead lead :  leadList){
+            checkLeadEmail(lead);
+        }
+    }
+
+    private static void checkLeadEmail(Lead lead){
+        if(lead.Email != null && lead.Email.length() < 20){
+            lead.Email = lead.Email + 'z';
+        }
+    }
+    
 }
