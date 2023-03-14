@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Stage_Changed_to_Closed_Won</fullName>
+    <active>false</active>
+    <errorConditionFormula>AND( NOT( $Profile.Name = &quot;System Administrator&quot;),  ISPICKVAL( PRIORVALUE( StageName ) , &quot;Negotiation/Review&quot;) ,  ISPICKVAL(StageName, &quot;Closed Won&quot;),  ISBLANK( NextStep )   )</errorConditionFormula>
+    <errorDisplayField>AccountId</errorDisplayField>
+    <errorMessage>if the Stage is changed to Closed Won from Negotiation then the ‘Next step’ field must be populated – i.e., it cannot be empty.</errorMessage>
+</ValidationRule>
