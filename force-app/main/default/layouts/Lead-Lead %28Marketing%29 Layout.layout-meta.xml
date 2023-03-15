@@ -26,20 +26,20 @@
                 <field>Title</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>LeadSource</field>
-            </layoutItems>
-            <layoutItems>
                 <behavior>Required</behavior>
                 <field>Status</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>LeadEmail__c</field>
+                <behavior>Edit</behavior>
+                <field>CampaignId</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Country__c</field>
+                <behavior>Required</behavior>
+                <field>LeadSource</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>LeadEmail__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -62,6 +62,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Website</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Rating</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
@@ -88,17 +92,17 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Industry</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>NumberOfEmployees</field>
+                <field>AnnualRevenue</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>AnnualRevenue</field>
+                <field>NumberOfEmployees</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Industry</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
@@ -209,6 +213,15 @@
         <fields>CORE.USERS.FULL_NAME</fields>
         <fields>TASK.LAST_UPDATE</fields>
         <relatedList>RelatedHistoryList</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>CAMPAIGN.NAME</fields>
+        <fields>CAMPAIGN.START_DATE</fields>
+        <fields>CAMPAIGN.CAMPAIGN_TYPE</fields>
+        <fields>CM.STATUS</fields>
+        <fields>CM.RESPONDED</fields>
+        <fields>CM.LAST_UPDATE</fields>
+        <relatedList>RelatedCampaignList</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>ACTIVITY.SUBJECT</fields>
