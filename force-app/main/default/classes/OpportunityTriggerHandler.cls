@@ -1,4 +1,5 @@
 public class OpportunityTriggerHandler{
+    // If Opportunity stage is chnages from Negotiation/Review to closed Won than next field can be empty
     public static void opportunityStageChanged(List<Opportunity> opportunityList, List<Opportunity> oldOpportunityList) {
         Map<String, Opportunity> oldOpportunityMap = new Map<String, Opportunity>();
         for(Opportunity opportunity : oldOpportunityList){
