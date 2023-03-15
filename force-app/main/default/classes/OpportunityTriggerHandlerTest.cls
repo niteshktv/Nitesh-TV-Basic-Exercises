@@ -62,4 +62,24 @@ public class OpportunityTriggerHandlerTest {
         update opportunities;
         System.assertEquals(1000, [Select Id, AccountId from Contract where AccountId = :account.Id].size());
     }
+    //Exercise-8 
+    //Opportunity Close Date should fall under the current month Test
+    @isTest static void checkOpportunityClosedDate(){
+        Opportunity futureOpportunity = new Opportunity(Name='Demo', CloseDate=Date.newInstance(2023, 4,2), StageName='Prosepecting');
+        try{
+            insert futureOpportunity;
+        }catch(Exception e){
+            System.assertEquals(true, e.getMessage().contains('Opportunity Close Date should fall under the current month'));
+        }
+        System.assertEquals(0, [Select id from Opportunity].size());
+    }
+    @istest static void checkForBulk(){
+        Opportunity[] opportunities = new Opportunity[]{
+            new Opportunity(Name='Demo', CloseDate=Date.newInstance(2023, 3,20), StageName='Prosepecting'),
+            new Opportunity(Name='Demo', CloseDate=Date.newInstance(2023, 3,2), StageName='Qualification'),
+            new Opportunity(Name='Demo', CloseDate=Date.newInstance(2023, 3,15), StageName='Qualification')
+        };
+        insert opportunities;
+        System.assertEquals(3, [Select id from Opportunity].size());
+    }
 }

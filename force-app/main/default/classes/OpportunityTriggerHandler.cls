@@ -39,4 +39,15 @@ public class OpportunityTriggerHandler{
         }
         update contractList;
     }
+    
+
+    //Exercise-8
+    //Opportunity Close Date should fall under the current month
+    public static void checkOpportunityClosedDate(List<Opportunity> opportunityList){
+        for(Opportunity opportunity : opportunityList){
+            if(opportunity.CloseDate > Date.newInstance(Date.today().month() == 12 ? Date.today().year() + 1 : Date.today().year(), Date.today().month() == 12 ? 12 : Date.today().month() + 1, 1) - 1){
+                opportunity.CloseDate.addError('Opportunity Close Date should fall under the current month');
+            }
+        }
+    }
 }
