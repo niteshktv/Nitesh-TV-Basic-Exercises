@@ -27,4 +27,39 @@ public class OpportunityTriggerHandlerTest {
             System.assertEquals(false, e.getMessage().contains('Next Step can not be Empty'));
         }
     }
+
+    // Exercise-7 
+    //Opportunity Stage
+    @isTest static void opportunityStageSetToClosedWon(){
+        Account account = new Account(Name='Mohit');
+        insert account;
+
+        Opportunity opportunity = new Opportunity(Name='Demo', CloseDate=Date.newInstance(2023, 3,15), AccountId= account.Id, StageName='Prosepecting');
+        insert opportunity;
+
+        opportunity.StageName='Closed Won';
+        update opportunity;
+        System.assertEquals(1, [Select Id, AccountId from Contract where AccountId = :opportunity.AccountId].size());
+    }
+    //testing for bulkification
+    @isTest static void opportunityStageSetToClosedWonBulkTest(){
+        Account account = new Account(Name='Mohit');
+        insert account;
+
+        Opportunity[] opportunities = new Opportunity[1000];
+        for(Integer i=0; i< 1000; i++){
+            if(i/2==0){
+                opportunities[i] = new Opportunity(Name='Demo'+i, CloseDate=Date.newInstance(2023, 3,15), AccountId= account.Id, StageName='Prosepecting');
+            }else{
+                opportunities[i] = new Opportunity(Name='Demo'+i, CloseDate=Date.newInstance(2023, 3,15), AccountId= account.Id, StageName='Qualification');
+            }          
+        }
+        insert opportunities;
+
+        for(Opportunity opp : opportunities){
+            opp.StageName='Closed Won';
+        }
+        update opportunities;
+        System.assertEquals(1000, [Select Id, AccountId from Contract where AccountId = :account.Id].size());
+    }
 }
