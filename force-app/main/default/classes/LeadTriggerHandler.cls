@@ -1,10 +1,10 @@
 public class LeadTriggerHandler {
     //After Insert or  Update
-    public static void checkAfterLead(List<Lead> leadList){
+    public static void checkLeadAfterUpdate(List<Lead> leadList){
         for(Lead lead : leadList){
             // If Country Belongs to United States than must have 10 digits phone number
-            if(lead.Country__c == 'United States' && (lead.Phone == null || string.ValueOf(lead.Phone).length() < 10)){
-                lead.addError('Phone should be of 10 characters');
+            if(lead.Country__c == 'United States' && (string.ValueOf(lead.Phone).length() < 10)){
+                lead.Phone.addError('Phone should be of 10 characters');
             }
             // Either phone or email is required to save record
             if(lead.Email == null && lead.Phone == null){
@@ -13,21 +13,21 @@ public class LeadTriggerHandler {
             //Exercise-2
             // Lead email should not end with the following domains: .games .garden .glass .free .talk
             if(checkLastDomain(lead)){
-                lead.addError('Email Can not ends with .games, .garden, .glass, .free, .talk ');
+                lead.Email.addError('Email Can not ends with .games, .garden, .glass, .free, .talk ');
             }
             // lead should not email starts with info@, contact@, Career@.
             if(checkStartDomain(lead)){
-                lead.addError('Email Can not starts with Career@, contact@, info@');
+                lead.Email.addError('Email Can not starts with Career@, contact@, info@');
             }
             //Exercise-4
             // lead source is required to save record
             if(Lead.LeadSource == null){
-                lead.addError('Enter a lead source');
+                lead.LeadSource.addError('Enter a lead source');
             }
             //Exercise-5
             // Email does not contains 'a' between the 5th character and the 12th character
-            if(aBeetween5To12(lead)){
-                lead.addError('character "a" in the Lead objects Email field between the 5th character and the 12th character');
+            if(containsCharacterABetween(lead)){
+                lead.Email.addError('character "a" in the Lead objects Email field between the 5th character and the 12th character');
             }
         }
     }
@@ -57,40 +57,40 @@ public class LeadTriggerHandler {
 
     // Exercise-3
     // Is email length less than 20  than append with 'z'
-    public static void checkBeforeLead(List<Lead> leadList){
+    public static void checkLeadBeforeUpdate(List<Lead> leadList){
         for(Lead lead :  leadList){
-            checkLeadEmail(lead);
-        }
-    }
-
-    private static void checkLeadEmail(Lead lead){
-        if(lead.Email != null && lead.Email.length() < 20){
-            lead.Email = lead.Email + 'z';
+            if(lead.Email != null && lead.Email.length() < 20){
+                lead.Email = lead.Email + 'z';
+            }
         }
     }
 
     //Exercise-4 
     //auto add related campagin to a lead based on lead source
     public static void addCampaginToLead(List<Lead> leadList){
-        Set<String> leadSource = new Set<String>();
+        Set<String> leadSourceSet = new Set<String>();
 
         for(Lead lead : leadList){
-            if(lead.LeadSource != null){
-                leadSource.add(lead.LeadSource);
+            if(lead.leadSourceSet != null){
+                leadSourceSet.add(lead.leadSourceSet);
             }
         }
 
-        List<Campaign> campaignList = [SELECT ID, Name FROM Campaign WHERE Name IN :leadSource ];
+        List<Campaign> campaignList = [SELECT ID, Name FROM Campaign WHERE Name IN :leadSourceSet ];
 
-        Map<String, Campaign> campaignMap = new Map<String, Campaign>();
+        Map<String, Campaign> campaignNameWIthCampaignMap = new Map<String, Campaign>();
         for(Campaign campaign : campaignList){
-            campaignMap.put(campaign .Name, campaign);
+            campaignNameWIthCampaignMap.put(campaign.Name, campaign);
         }
 
         List<CampaignMember> campaignMemberList = new List<CampaignMember>();
         for(Lead lead : leadList){
-            if(lead.LeadSource != null && campaignMap.containsKey(lead.LeadSource)){
-                campaignMemberList.add(new CampaignMember(CampaignId = campaignMap.get(lead.LeadSource).Id, LeadId = lead.Id, Status = 'sent'));
+            if(lead.leadSourceSet != null && campaignNameWIthCampaignMap.containsKey(lead.leadSourceSet)){
+                CampaignMember campaginMember = new CampaignMember();
+                campaginMember.CampaignId = campaignNameWIthCampaignMap.get(lead.leadSourceSet).Id;
+                campaginMember.LeadId = lead.Id;
+                campaginMember.Status = 'Sent';
+                campaignMemberList.add(campaginMember);
             }
         }
         insert campaignMemberList;
@@ -99,7 +99,7 @@ public class LeadTriggerHandler {
     
     //Exercise-5 
     // Email does not contains 'a' between the 5th character and the 12th character
-    private static boolean aBeetween5To12(Lead lead){
+    private static boolean containsCharacterABetween(Lead lead){
             if(lead.Email != null && lead.Email.length() > 12 && lead.Email.substring(4, 12).contains('a')){
                 return true;
             }
