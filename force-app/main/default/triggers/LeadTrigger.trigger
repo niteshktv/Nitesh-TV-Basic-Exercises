@@ -5,5 +5,6 @@ trigger LeadTrigger on Lead (before insert, before update, after insert, after u
 	if(Trigger.isAfter && (Trigger.isInsert || Trigger.isUpdate)){
 		LeadTriggerHandler.checkLeadAfterUpdate(Trigger.new);
         LeadTriggerHandler.addCampaginToLead(Trigger.new);
+		LeadTriggerHandler.makeReasonRequired(Trigger.new);
 	}
 }

@@ -71,8 +71,8 @@ public class LeadTriggerHandler {
         Set<String> leadSourceSet = new Set<String>();
 
         for(Lead lead : leadList){
-            if(lead.leadSourceSet != null){
-                leadSourceSet.add(lead.leadSourceSet);
+            if(lead.LeadSource != null){
+                leadSourceSet.add(lead.LeadSource);
             }
         }
 
@@ -85,9 +85,9 @@ public class LeadTriggerHandler {
 
         List<CampaignMember> campaignMemberList = new List<CampaignMember>();
         for(Lead lead : leadList){
-            if(lead.leadSourceSet != null && campaignNameWIthCampaignMap.containsKey(lead.leadSourceSet)){
+            if(lead.LeadSource != null && campaignNameWIthCampaignMap.containsKey(lead.LeadSource)){
                 CampaignMember campaginMember = new CampaignMember();
-                campaginMember.CampaignId = campaignNameWIthCampaignMap.get(lead.leadSourceSet).Id;
+                campaginMember.CampaignId = campaignNameWIthCampaignMap.get(lead.LeadSource).Id;
                 campaginMember.LeadId = lead.Id;
                 campaginMember.Status = 'Sent';
                 campaignMemberList.add(campaginMember);
@@ -105,6 +105,14 @@ public class LeadTriggerHandler {
             }
         return false;
     }
-    
+    //Exercise-11 
+    //whenever lead is marked as Unqualified, the Reason (reason__c) field is required.It shouldn’t trigger for cloned and new records.
+    public static void makeReasonRequired(List<Lead> leadList){
+        for(Lead lead : leadList){
+            if(lead.Status != null && lead.Status =='Unqualified' && lead.Reason__c == null){
+                lead.Reason__c.addError('Reason is required to save the record');
+            }
+        }
+    }
     
 }
