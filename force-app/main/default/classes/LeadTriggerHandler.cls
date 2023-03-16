@@ -109,7 +109,7 @@ public class LeadTriggerHandler {
     //whenever lead is marked as Unqualified, the Reason (reason__c) field is required.It shouldn’t trigger for cloned and new records.
     public static void makeReasonRequired(List<Lead> leadList){
         for(Lead lead : leadList){
-            if(lead.Status != null && lead.Status =='Unqualified' && lead.Reason__c == null){
+            if(lead.Status != null && lead.Status =='Unqualified' && lead.Reason__c == null && lead.isClone() != true){
                 lead.Reason__c.addError('Reason is required to save the record');
             }
         }

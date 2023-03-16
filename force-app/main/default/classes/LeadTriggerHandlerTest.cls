@@ -14,9 +14,14 @@ private class LeadTriggerHandlerTest{
     
     // Test phone when country is US
     @isTest static void usCountryWithPhoneTest(){
-        Lead usLead = new Lead(LastName='Singh',Company='Thinkvibes', Country__c='United States', Phone='1234567890', LeadSource = 'Web');
-        insert usLead;
-        System.assertEquals(1, [SELECT Id FROM Lead].size());
+        Lead usLead = new Lead(LastName='Singh',Company='Thinkvibes', Country__c='United States', Phone='123456', LeadSource = 'Web');
+        try{
+            insert usLead;
+        }catch(Exception e){
+            System.assertEquals(true, e.getMessage().contains('Phone should be of 10 characters'));
+        }
+        
+        System.assertEquals(0, [SELECT Id FROM Lead].size());
     }
 
     // country is other than US
@@ -139,5 +144,26 @@ private class LeadTriggerHandlerTest{
             System.assertEquals('System.DmlException', e.getTypeName());
         }
         System.assertEquals(0, [Select Id from Lead].size());
+    }
+    //Exercise-11 
+    // whenever lead is marked as Unqualified, the Reason (reason__c) field is required.it shouldn’t trigger for cloned and new records.
+    @isTest static void makeReasonRequiredTest(){
+        Lead lead = new Lead(LastName='Singh', Company='Thinkvibes', Email='guestuser@tv.com', LeadSource = 'Web',Status='Unqualified');
+        try{
+            insert lead;
+        }catch(Exception e){
+            System.assertEquals(true, e.getMessage().contains('Reason is required to save the record'));
+        }
+        
+        System.assertEquals(0, [Select Id, Status From Lead Where Status='Unqualified'].size());
+    }
+
+    @isTest static void makeReasonRequiredBulkTest(){
+        Lead[] leads = new Lead[100];
+        for(Integer i=0; i<100; i++){
+            leads[i] = new Lead(LastName='Demo'+i, Company='Thinkvibes', Email='guestuser@tv.com', LeadSource = 'Web', Status='Unqualified',Reason__c='Reason'+i);
+        }
+        insert leads;
+        System.assertEquals(100, [Select Id, Status From Lead Where Status='Unqualified'].size());
     }
 }
