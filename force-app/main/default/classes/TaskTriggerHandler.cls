@@ -4,9 +4,7 @@ public with sharing class TaskTriggerHandler {
         List<String> taskWhatId = new List<String>();
         for(Task task : taskList ){
             if(
-                task.Subject != null &&
                 task.Subject == '1stAppointment' &&
-                task.Status != null &&
                 task.Status == 'Completed'
             ){
                 taskWhatId.add(task.WhatId);

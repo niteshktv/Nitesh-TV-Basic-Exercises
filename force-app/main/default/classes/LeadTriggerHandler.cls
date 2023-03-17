@@ -1,6 +1,6 @@
 public class LeadTriggerHandler {
     //After Insert or  Update
-    public static void checkLeadAfterUpdate(List<Lead> leadList){
+    public static void validateLeadRecords(List<Lead> leadList){
         for(Lead lead : leadList){
             // If Country Belongs to United States than must have 10 digits phone number
             if(lead.Country__c == 'United States' && (string.ValueOf(lead.Phone).length() < 10)){
@@ -26,8 +26,12 @@ public class LeadTriggerHandler {
             }
             //Exercise-5
             // Email does not contains 'a' between the 5th character and the 12th character
-            if(containsCharacterABetween(lead)){
+            if(isEmailContainsABetween(lead)){
                 lead.Email.addError('character "a" in the Lead objects Email field between the 5th character and the 12th character');
+            }
+            //whenever lead is marked as Unqualified, the Reason (reason__c) field is required.It shouldn’t trigger for cloned and new records.
+            if(isReasonRequired(lead)){
+                lead.Reason__c.addError('Reason is required to save the record');
             }
         }
     }
@@ -57,7 +61,7 @@ public class LeadTriggerHandler {
 
     // Exercise-3
     // Is email length less than 20  than append with 'z'
-    public static void checkLeadBeforeUpdate(List<Lead> leadList){
+    public static void appendEmailWithZ(List<Lead> leadList){
         for(Lead lead :  leadList){
             if(lead.Email != null && lead.Email.length() < 20){
                 lead.Email = lead.Email + 'z';
@@ -99,7 +103,7 @@ public class LeadTriggerHandler {
     
     //Exercise-5 
     // Email does not contains 'a' between the 5th character and the 12th character
-    private static boolean containsCharacterABetween(Lead lead){
+    private static boolean isEmailContainsABetween(Lead lead){
             if(lead.Email != null && lead.Email.length() > 12 && lead.Email.substring(4, 12).contains('a')){
                 return true;
             }
@@ -107,12 +111,11 @@ public class LeadTriggerHandler {
     }
     //Exercise-11 
     //whenever lead is marked as Unqualified, the Reason (reason__c) field is required.It shouldn’t trigger for cloned and new records.
-    public static void makeReasonRequired(List<Lead> leadList){
-        for(Lead lead : leadList){
-            if(lead.Status != null && lead.Status =='Unqualified' && lead.Reason__c == null && lead.isClone() != true){
-                lead.Reason__c.addError('Reason is required to save the record');
-            }
+    public static boolean isReasonRequired(Lead lead){
+            if(lead.Status =='Unqualified' && lead.Reason__c == null && lead.isClone() != true){
+                return true;
         }
+        return false;
     }
     
 }

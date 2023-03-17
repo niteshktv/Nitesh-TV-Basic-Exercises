@@ -17,13 +17,12 @@ public class AccountTriggerHandler {
                 accountIdSet.add(account.Id);
             }
         }
-        if(accountIdSet.isEmpty()){
-            return;
+        if(!accountIdSet.isEmpty()){
+            List<Opportunity> opportunityList = [SELECT Id,AccountId, StageName  FROM Opportunity Where AccountId IN :accountIdSet and (StageName != 'Closed Won' OR StageName != 'Closed Lost') ];
+            for(Opportunity opp : opportunityList){
+                opp.StageName = 'Closed Won';
+            } 
+            update opportunityList;
         }
-        List<Opportunity> opportunityList = [SELECT Id,AccountId, StageName  FROM Opportunity Where AccountId IN :accountIdSet and (StageName != 'Closed Won' OR StageName != 'Closed Lost') ];
-                for(Opportunity opp : opportunityList){
-                    opp.StageName = 'Closed Won';
-                }
-        update opportunityList;
     }
 }
