@@ -1,26 +1,26 @@
 public class OpportunityTriggerHandler{
     // If Opportunity stage is chnages from Negotiation/Review to closed Won than next field can be empty
-    public static void changeOpportunityStageToClosedWon(Map<Id ,Opportunity> opportunityMap, Map<Id, Opportunity> oldOpportunityMap) {
+    public static void changeOpportunityStageToClosedWon(Map<Id ,Opportunity> newOpportunityMap, Map<Id, Opportunity> opportunityMap) {
         String currentUserId = UserInfo.getUserId();
         User currentUser = [Select Id, Profile.Name From User where Id =:currentUserId limit 1];
 
-        for (Id currentId : opportunityMap.keySet()) {
-            Opportunity currentOpp = opportunityMap.get(currentId);
-            Opportunity oldOpp = oldOpportunityMap.get(currentId);
+        for (Id newOpportunityId : newOpportunityMap.keySet()) {
+            Opportunity newOpportunity = newOpportunityMap.get(newOpportunityId);
+            Opportunity oldOpportunity = opportunityMap.get(newOpportunityId);
             if (
                 currentUser.Profile.Name != 'System Administrator' &&
-                oldOpp.StageName == 'Negotiation/Review' &&
-                currentOpp.StageName == 'Closed Won' &&
-                currentOpp.NextStep == null
+                oldOpportunity.StageName == 'Negotiation/Review' &&
+                newOpportunity.StageName == 'Closed Won' &&
+                newOpportunity.NextStep == null
             ) {
-                currentOpp.NextStep.addError('Next Step can not be Empty');
+                newOpportunity.NextStep.addError('Next Step can not be Empty');
             }
         }
     }
 
     //Exercise-7 
     //Whenever an Opportunity is marked ‘Closed-Won’, auto create a Contract and activate it.
-    public static void createContractStageChangesToClosedWon(List<Opportunity> opportunityList){
+    public static void createContractForOpportunityAccount(List<Opportunity> opportunityList){
         List<Contract> contractList = new List<Contract>();
         for(Opportunity opportunity : opportunityList){
             if(opportunity.StageName == 'Closed Won' && opportunity.AccountId != null){
@@ -43,8 +43,8 @@ public class OpportunityTriggerHandler{
 
     //Exercise-8
     //Opportunity Close Date should fall under the current month
-    public static void checkOpportunityClosedDate(List<Opportunity> opportunityMap){
-        for(Opportunity opportunity : opportunityMap){
+    public static void validateOpportunityCloseDate(List<Opportunity> opportunityList){
+        for(Opportunity opportunity : opportunityList){
             if(opportunity.CloseDate > Date.newInstance(Date.today().month() == 12 ? Date.today().year() + 1 : Date.today().year(), Date.today().month() == 12 ? 12 : Date.today().month() + 1, 1) - 1){
                 opportunity.CloseDate.addError('Opportunity Close Date should fall under the current month');
             }

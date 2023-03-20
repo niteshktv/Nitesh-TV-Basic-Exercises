@@ -12,6 +12,7 @@ public class OpportunityTriggerHandlerTest {
         } catch (Exception e) {
             System.assertEquals(true, e.getMessage().contains('Next Step can not be Empty'));
         }
+        System.assertEquals(1, [Select ID , StageName from Opportunity].size());
     }
 
     // If stage is chnages from Negotiation/Review to closed won and NextStep field is not empty Test
@@ -26,6 +27,7 @@ public class OpportunityTriggerHandlerTest {
         } catch (Exception e) {
             System.assertEquals(false, e.getMessage().contains('Next Step can not be Empty'));
         }
+        System.assertEquals(1, [Select ID , StageName from Opportunity where StageName='Closed Won'].size());
     }
 
     // Exercise-7 

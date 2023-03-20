@@ -1,3 +1,3 @@
 trigger TaskTrigger on Task (after insert, after update) {
-    TaskTriggerHandler.checkTask(Trigger.new);
+    TaskTriggerHandler.validateTaskRecords(Trigger.new);
 }

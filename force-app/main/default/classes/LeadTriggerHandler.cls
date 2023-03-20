@@ -30,7 +30,7 @@ public class LeadTriggerHandler {
                 lead.Email.addError('character "a" in the Lead objects Email field between the 5th character and the 12th character');
             }
             //whenever lead is marked as Unqualified, the Reason (reason__c) field is required.It shouldn’t trigger for cloned and new records.
-            if(isReasonRequired(lead)){
+            if(return (lead.Status =='Unqualified' && lead.Reason__c == null && lead.isClone() != true)){
                 lead.Reason__c.addError('Reason is required to save the record');
             }
         }
@@ -108,14 +108,5 @@ public class LeadTriggerHandler {
                 return true;
             }
         return false;
-    }
-    //Exercise-11 
-    //whenever lead is marked as Unqualified, the Reason (reason__c) field is required.It shouldn’t trigger for cloned and new records.
-    public static boolean isReasonRequired(Lead lead){
-            if(lead.Status =='Unqualified' && lead.Reason__c == null && lead.isClone() != true){
-                return true;
-        }
-        return false;
-    }
-    
+    } 
 }

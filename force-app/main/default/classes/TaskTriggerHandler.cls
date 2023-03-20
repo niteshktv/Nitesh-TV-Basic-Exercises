@@ -1,6 +1,6 @@
 public with sharing class TaskTriggerHandler {
     //Whenever a task (related to an Opportunity) with Subject “1stAppointment” is marked as completed then auto update related opportunity Stage to Negotiation.
-    public static void checkTask(List<Task> taskList){
+    public static void validateTaskRecords(List<Task> taskList){
         List<String> taskWhatId = new List<String>();
         for(Task task : taskList ){
             if(
