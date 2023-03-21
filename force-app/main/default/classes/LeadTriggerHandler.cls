@@ -13,7 +13,7 @@ public class LeadTriggerHandler {
             //Exercise-2
             // Lead email should not end with the following domains: .games .garden .glass .free .talk
             if(checkLastDomain(lead)){
-                lead.Email.addError('Email Can not ends with .games, .garden, .glass, .free, .talk ');
+                lead.Email.addError('Email Can not ends with .games, .garden, .glass, .free, .talk');
             }
             // lead should not email starts with info@, contact@, Career@.
             if(checkStartDomain(lead)){
@@ -50,7 +50,7 @@ public class LeadTriggerHandler {
     // Exercise-2 
     // lead should not email starts with info@, contact@, Career@.
     public static boolean checkStartDomain(Lead lead){
-        String[] domains = new String[]{'info@', 'contact@', 'Career@'};
+        String[] domains = new String[]{'info@', 'contact@', 'career@'};
         for(String domain  : domains){
             if (lead.Email != null && lead.Email.startsWith(domain)) {
                 return true;

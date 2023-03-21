@@ -3,167 +3,243 @@ private class LeadTriggerHandlerTest{
     //Exercise-1 Point-1
     //Country is US
     @isTest static void usCountryTest(){
-        Lead usLead = new Lead(LastName='Singh', Country__c='United States', LeadSource = 'Web');
-        try {
-            insert usLead;
-        } catch (Exception e) {
-            System.assertEquals('System.DmlException', e.getTypeName());
+        List<Lead> leadList = UtilityTest.createLeadWithCountryUnitedStates('Demo Lead', 10, false);
+        Test.startTest();
+        List<Database.SaveResult> results = Database.insert(leadList, false);
+        Test.stopTest();
+        for (Database.SaveResult sr : results) {
+            if (sr.isSuccess()) {
+                System.debug('Successfully inserted lead. lead ID: ' + sr.getId());
+            }
+            else {
+                // Operation failed, so get all errors                
+                for(Database.Error err : sr.getErrors()) {  
+                    System.debug(err.getMessage());                 
+                    System.assertEquals(true,err.getMessage().contains('Phone should be of 10 characters'));
+                }
+            }
         }
-        System.assertEquals(0, [SELECT Id FROM Lead].size());
-    }
-    
-    // Test phone when country is US
-    @isTest static void usCountryWithPhoneTest(){
-        Lead usLead = new Lead(LastName='Singh',Company='Thinkvibes', Country__c='United States', Phone='123456', LeadSource = 'Web');
-        try{
-            insert usLead;
-        }catch(Exception e){
-            System.assertEquals(true, e.getMessage().contains('Phone should be of 10 characters'));
-        }
-        
-        System.assertEquals(0, [SELECT Id FROM Lead].size());
+        System.assertEquals(5, [Select id, Country__c from Lead where Country__c='United States'].size());
     }
 
     // country is other than US
     @isTest static void otherCountry(){
-        Lead usLead1 = new Lead(LastName='Singh',Company='Thinkvibes', Country__c='India', Phone='12345', LeadSource = 'Web');
-        insert usLead1;
-        
-        Lead usLead2 = new Lead(LastName='Singh',Company='Thinkvibes', Country__c='India', Email='Mohit.Singh@thinkvibes.com', LeadSource = 'Web');
-        insert usLead2;
-        System.assertEquals(2, [SELECT Id FROM Lead].size());
-    }
-    // No Country is selected 
-    @isTest static void emailTest(){    
-        Lead usLead = new Lead(LastName='Singh',Company='Thinkvibes', Email='Mohit.Singh@thinkvibes.com', LeadSource = 'Web');
-        insert usLead;
-        System.assertEquals(1, [SELECT Id FROM Lead].size());
-    }
-    // No Country is selected 
-    @isTest static void phoneTest(){    
-        Lead usLead = new Lead(LastName='Singh',Company='Thinkvibes', Phone='8432895', LeadSource = 'Web');
-        insert usLead;
-        System.assertEquals(1, [SELECT Id FROM Lead].size());
-    }
-    // No email or phone Test
-    @isTest static void withoutEmailOrPhoneTest(){    
-        Lead usLead = new Lead(LastName='Singh',Company='Thinkvibes', LeadSource = 'Web');
-        try{
-            insert usLead;
-        }catch(Exception e){
-            System.assertEquals('System.DmlException', e.getTypeName());
+        List<Lead> leadList = UtilityTest.createLead('Demo Lead', 10, false);
+        for(Lead lead: leadList){
+            lead.Country__c = 'India';
+            lead.Phone = '47766';
         }
-        System.assertEquals(0, [SELECT Id FROM Lead].size());
+        Test.startTest();
+        List<Database.SaveResult> results = Database.insert(leadList, false);
+        Test.stopTest();
+        for (Database.SaveResult sr : results) {
+            if (sr.isSuccess()) {
+                System.debug('Successfully inserted lead. lead ID: ' + sr.getId());
+            }
+            else {
+                // Operation failed, so get all errors                
+                for(Database.Error err : sr.getErrors()) {  
+                    System.debug(err.getMessage());                 
+                    System.assertEquals(true,err.getMessage().contains('Phone should be of 10 characters'));
+                }
+            }
+        }
+        System.assertEquals(10, [Select id, Country__c from Lead where Country__c='India'].size());
+    }
+    // Either phone or email is required to save the record
+    @isTest static void emailOrPhoneTest(){
+        List<Lead> leadList = UtilityTest.createLead('Demo Lead', 10, false);
+        for(Integer i=0; i<leadList.size(); i++){
+            if(i<=3){
+                leadList[i].Phone = '78357';
+            } 
+            if(i>3 && i<=7){
+                leadList[i].Email = 'Demo.user@gmail.com';
+            }
+        }
+        for(Lead lead: leadList){
+            System.debug(lead);
+        }
+        Test.startTest();
+        List<Database.SaveResult> results = Database.insert(leadList, false);
+        Test.stopTest();
+        for (Database.SaveResult sr : results) {
+            if (sr.isSuccess()) {
+                System.debug('Successfully inserted lead. lead ID: ' + sr.getId());
+            }
+            else {
+                // Operation failed, so get all errors                
+                for(Database.Error err : sr.getErrors()) {  
+                    System.debug(err.getMessage());                 
+                    System.assertEquals(true,err.getMessage().contains('Either email or phone is required'));
+                }
+            }
+        }
+        System.assertEquals(8, [Select id, Country__c from Lead].size());
     }
 
     // Exercise-2 Point-1
     // Email ends with .games, .garden, .glass, .free, .talk 
     @isTest static void EndDomainTest(){
-        Lead lead1 = new Lead(LastName='Singh',Company='Thinkvibes', Email='mohit.singh@thinkvibes.garden', LeadSource = 'Web');
-        try{
-            insert lead1;
-        }catch(Exception e){
-            System.assertEquals('System.DmlException', e.getTypeName());
+        List<Lead> leadList = UtilityTest.createLead('Demo Lead', 10, false);
+        for(Integer i=0; i<leadList.size(); i++){
+            if(i<3){
+                leadList[i].Email = 'guestuser@demo.games';
+            }else if(i>=3 && i<7){
+                leadList[i].Email = 'guestuser@demo.glass';
+            }else if(i>=7){
+                leadList[i].Email = 'guestusers@demo.free';
+            }
         }
-        System.assertEquals(0, [SELECT Id FROM Lead].size());
+        for(Lead lead:leadList){
+            System.debug('Lead: '+ lead);
+        }
+
+        Test.startTest();
+        List<Database.SaveResult> results = Database.insert(leadList, false);
+        Test.stopTest();
+        for (Database.SaveResult sr : results) {
+            if (sr.isSuccess()) {
+                System.debug('Successfully inserted lead. lead ID: ' + sr.getId());
+            }
+            else {
+                // Operation failed, so get all errors                
+                for(Database.Error err : sr.getErrors()) {  
+                    System.debug(err.getMessage());                 
+                    System.assertEquals(true,err.getMessage().contains('Email Can not ends with .games, .garden, .glass, .free, .talk'));
+                }
+            }
+        }
+        System.assertEquals(0, [Select id from Lead].size());
     }
 
     // Exercise-2 Point-1
     // Email starts with Career@, contact@, info@ Test
-    @isTest static void StartDomainTest(){
-        Lead lead1 = new Lead(LastName='Singh',Company='Thinkvibes', Email='Info@thinkvibes.com', LeadSource = 'Web');
-        try{
-            insert lead1;
-        }catch(Exception e){
-            System.assertEquals('System.DmlException', e.getTypeName());
+    @isTest static void startDomainTest(){
+        List<Lead> leadList = UtilityTest.createLead('Demo Lead', 10, false);
+        for(Integer i=0; i<leadList.size(); i++){
+            if(i<3){
+                leadList[i].Email = 'career@demo.com';
+             }else{
+                leadList[i].Email ='Demo@demo.com';
+             }
         }
-        System.assertEquals(0, [SELECT Id FROM Lead].size());
+        Test.startTest();
+        List<Database.SaveResult> results = Database.insert(leadList, false);
+        Test.stopTest();
+        for (Database.SaveResult sr : results) {
+            if (sr.isSuccess()) {
+                System.debug('Successfully inserted lead. lead ID: ' + sr.getId());
+            }
+            else {
+                // Operation failed, so get all errors                
+                for(Database.Error err : sr.getErrors()) {  
+                    System.debug(err.getMessage());                 
+                    System.assertEquals(true,err.getMessage().contains('Email Can not starts with Career@, contact@, info@'));
+                }
+            }
+        }
+        System.assertEquals(7, [Select id from Lead].size());
     }
     // Exercise-3 
     // Check email length Test 
     @isTest static void EmailLengthLessThan20(){
         Lead lead = new Lead(LastName='Singh', Company='Thinkvibes', Email='Mohit@tv.com', LeadSource = 'Web');
         insert lead;
-		System.debug([SELECT ID, Email from Lead Where Id = :lead.Id limit 1].Email);
+		// System.debug([SELECT ID, Email from Lead Where Id = :lead.Id limit 1].Email); 
         System.assertEquals('mohit@tv.comz', [SELECT ID, Email from Lead Where Id = :lead.Id limit 1].Email);
     }
 
     // Exercise-4 
-    //If lead status is not selected
-    @isTest static void leadSourceNotSelected(){
-        Lead lead = new Lead(LastName='Singh', Company='Thinkvibes', Email='Mohit@tv.com');
-        try{
-            insert lead;
-        }catch(Exception e){
-            System.debug(e.getTypeName());
-            System.assertEquals('System.DmlException', e.getTypeName());
+    //If lead Source is required
+    @isTest static void leadSourceRequiredTest(){
+        List<Lead> leadList = UtilityTest.createLeadWithoutLeadSource('Demo Lead', 10, false);
+        for(Integer i=0; i<leadList.size(); i++){
+            if(i<3){
+                leadList[i].LeadSource = 'Web';
+            }else if(i>=3 && i<7){
+                leadList[i].LeadSource = 'Phone Inquiry';
+            }
         }
-        System.assertEquals(0, [Select ID from lead].size());
-    }
-    
-    //leadSource is selceted
-    @isTest static void leadSourceSelected(){
-        Campaign campagin= new Campaign(Name = 'Web');
-        insert campagin;
-        
-        Lead lead = new Lead(LastName='Singh', Company='Thinkvibes', Email='Mohit@tv.com', LeadSource = 'Web');
-        insert lead;
-        
-        System.assertEquals(1, [Select ID from CampaignMember].size());
+        Test.startTest();
+        List<Database.SaveResult> results = Database.insert(leadList, false);
+        Test.stopTest();
+        for (Database.SaveResult sr : results) {
+            if (sr.isSuccess()) {
+                System.debug('Successfully inserted lead. lead ID: ' + sr.getId());
+            }
+            else {
+                // Operation failed, so get all errors                
+                for(Database.Error err : sr.getErrors()) {  
+                    System.debug(err.getMessage());                 
+                    System.assertEquals(true,err.getMessage().contains('Enter a lead source'));
+                }
+            }
+        }
+        System.assertEquals(7, [Select id from Lead].size());
     }
     //Add multiple leads
     @isTest static void addMultipleLeads(){
-        Campaign[] campaigns = new Campaign[]{
-            new Campaign(Name= 'Web'),
-            new Campaign(Name= 'Phone Inquiry'),
-            new Campaign(Name= 'Partner Referral'),
-            new Campaign(Name= 'Purchased List'),
-            new Campaign(Name= 'Other')    
-        };
-        insert campaigns;
-        Lead[] leads = new Lead[]{
-             new Lead(LastName='Singh', Company='Thinkvibes', Email='Mohit@tv.com', LeadSource = 'Web'),
-             new Lead(LastName='Singh', Company='Thinkvibes', Email='Mohit@tv.com', LeadSource = 'Phone Inquiry'),
-           	 new Lead(LastName='Singh', Company='Thinkvibes', Email='Mohit@tv.com', LeadSource = 'Partner Referral'),
-             new Lead(LastName='Singh', Company='Thinkvibes', Email='Mohit@tv.com', LeadSource = 'Purchased List'),
-             new Lead(LastName='Singh', Company='Thinkvibes', Email='Mohit@tv.com', LeadSource = 'Web'),
-             new Lead(LastName='Singh', Company='Thinkvibes', Email='Mohit@tv.com', LeadSource = 'Mohit'),
-             new Lead(LastName='Singh', Company='Thinkvibes', Email='Mohit@tv.com', LeadSource = 'Other'),
-             new Lead(LastName='Singh', Company='Thinkvibes', Email='Mohit@tv.com', LeadSource = 'xyz')
-        };
-         insert leads;
-        System.assertEquals(6, [Select ID from CampaignMember].size());
+        List<Campaign> campaignList = UtilityTest.createCampaignForLead(10, true);
+        System.debug(campaignList);
+        List<Lead> leadList = UtilityTest.createLeadWithMultipleLeadSource('Demo Lead',10, true);
+        
+        System.assertEquals(8, [Select ID from CampaignMember].size());
     }
 
     // Exercise-5 Point-1 Test
-    @isTest static void aBeetween5To12(){
-        Lead lead = new Lead(LastName='Singh', Company='Thinkvibes', Email='Mohit.kumawat@tv.com', LeadSource = 'Web');
-        try{
-            insert lead;
-        }catch(Exception e){
-            System.assertEquals('System.DmlException', e.getTypeName());
+    @isTest static void isEmailContainsABetweenTest(){
+        List<Lead> leadList = UtilityTest.createLead('Demo Lead', 10, false);
+        for(Integer i=0; i<leadList.size(); i++){
+            if(i<5){
+                leadList[i].Email = 'Nitesh.kumawat@demo.tv';
+             }else{
+                leadList[i].Email ='guestuser@demo.info';
+             }
         }
-        System.assertEquals(0, [Select Id from Lead].size());
+        Test.startTest();
+        List<Database.SaveResult> results = Database.insert(leadList, false);
+        Test.stopTest();
+        for (Database.SaveResult sr : results) {
+            if (sr.isSuccess()) {
+                System.debug('Successfully inserted lead. lead ID: ' + sr.getId());
+            }
+            else {
+                // Operation failed, so get all errors                
+                for(Database.Error err : sr.getErrors()) {  
+                    System.debug(err.getMessage());                 
+                    System.assertEquals(true,err.getMessage().contains('character "a" in the Lead objects Email field between the 5th character and the 12th character'));
+                }
+            }
+        }
+        System.assertEquals(5, [Select id from Lead].size());
     }
     //Exercise-11 
     // whenever lead is marked as Unqualified, the Reason (reason__c) field is required.it shouldn’t trigger for cloned and new records.
     @isTest static void makeReasonRequiredTest(){
-        Lead lead = new Lead(LastName='Singh', Company='Thinkvibes', Email='guestuser@tv.com', LeadSource = 'Web',Status='Unqualified');
-        try{
-            insert lead;
-        }catch(Exception e){
-            System.assertEquals(true, e.getMessage().contains('Reason is required to save the record'));
+        List<Lead> leadList = UtilityTest.createLead('Demo Lead', 10, false);
+        for(Integer i=0; i<leadList.size(); i++){
+            leadList[i].Phone = '8473209';
+            leadList[i].Status='Unqualified';
+            if(i<5){
+                leadList[i].Reason__c = 'Custom Reason';
+            }
         }
-        
-        System.assertEquals(0, [Select Id, Status From Lead Where Status='Unqualified'].size());
-    }
-
-    @isTest static void makeReasonRequiredBulkTest(){
-        Lead[] leads = new Lead[100];
-        for(Integer i=0; i<100; i++){
-            leads[i] = new Lead(LastName='Demo'+i, Company='Thinkvibes', Email='guestuser@tv.com', LeadSource = 'Web', Status='Unqualified',Reason__c='Reason'+i);
+        Test.startTest();
+        List<Database.SaveResult> results = Database.insert(leadList, false);
+        Test.stopTest();
+        for (Database.SaveResult sr : results) {
+            if (sr.isSuccess()) {
+                System.debug('Successfully inserted lead. lead ID: ' + sr.getId());
+            }
+            else {
+                // Operation failed, so get all errors                
+                for(Database.Error err : sr.getErrors()) {  
+                    System.debug(err.getMessage());                 
+                    System.assertEquals(true,err.getMessage().contains('Reason is required to save the record'));
+                }
+            }
         }
-        insert leads;
-        System.assertEquals(100, [Select Id, Status From Lead Where Status='Unqualified'].size());
+        System.assertEquals(5, [Select id from Lead].size());
     }
 }
