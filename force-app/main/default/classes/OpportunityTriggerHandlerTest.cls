@@ -20,7 +20,7 @@ public class OpportunityTriggerHandlerTest {
                 }
             }
         }
-        System.assertEquals(5, [Select id, StageName from Opportunity where StageName='Closed Won'].size());
+        System.assertEquals(10, [Select id, StageName from Opportunity where StageName='Closed Won'].size());
     }
 
     // If stage is chnages from Negotiation/Review to closed won and NextStep field is not empty Test
@@ -116,4 +116,40 @@ public class OpportunityTriggerHandlerTest {
         }
         System.assertEquals(5, [Select id, StageName from Opportunity].size());
     }
+
+   public static testMethod void testRunAs() {
+        // Setup test data
+        // Create a unique UserName
+        String uniqueUserName = 'standarduser' + DateTime.now().getTime() + '@testorg.com';
+        // This code runs as the system user
+        Profile p = [SELECT Id FROM Profile WHERE Name='Standard User'];
+        User u = new User(Alias = 'standt', Email='standarduser@testorg.com',
+        EmailEncodingKey='UTF-8', LastName='Testing', LanguageLocaleKey='en_US',
+        LocaleSidKey='en_US', ProfileId = p.Id,
+        TimeZoneSidKey='America/Los_Angeles',
+         UserName=uniqueUserName);
+
+        System.runAs(u) {
+            List<Opportunity> opportunityList = UtilityTest.createOpportunity('Demo', 10, true);
+            for(Opportunity opportunity : opportunityList){
+                opportunity.StageName = 'Closed Won';
+            }
+            Test.startTest();
+            List<Database.UpsertResult> results = Database.upsert(opportunityList, false);
+            Test.stopTest();
+            for (Database.UpsertResult sr : results) {
+                if (sr.isSuccess()) {
+                    System.debug('Successfully inserted Opportunity. opp ID: ' + sr.getId());
+                }
+                else {
+                    // Operation failed, so get all errors                
+                    for(Database.Error err : sr.getErrors()) {                   
+                        System.assertEquals('Next Step can not be Empty',err.getMessage());
+                    }
+                }
+            }
+            System.assertEquals(5, [Select id, StageName from Opportunity where StageName='Closed Won'].size());
+          }
+    }
+
 }

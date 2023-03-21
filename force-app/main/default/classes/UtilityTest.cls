@@ -17,4 +17,42 @@ public with sharing class UtilityTest {
         }
         return opportunityList;
     }
+
+    public static List<Lead> createLead(String Name, Integer leadCount, boolean isInsert){
+        List<Lead> leadList =  new List<Lead>();
+        for(Integer i=0; i<leadCount; i++){
+            Lead lead = new Lead();
+            lead.LastName = Name +i;
+            lead.Company = 'Thinkvibes';
+            if(math.mod(i, 2) == 0){
+                lead.LeadSource = 'Web';
+            }else{
+                lead.LeadSource = 'Phone Inquiry';
+            }
+            leadList.add(lead);
+        }
+        if(isInsert){
+            insert leadList;
+        }
+        return leadList;
+    }
+    public static List<Lead> createLeadWithCountryUnitedStates(String Name, Integer leadCount, boolean isInsert){
+        List<Lead> leadList =  new List<Lead>();
+        for(Integer i=0; i<leadCount; i++){
+            Lead lead = new Lead();
+            lead.LastName = Name +i;
+            lead.Country__c = 'United States';
+            lead.Company = 'Thinkvibes';
+            if(math.mod(i, 2) == 0){
+                lead.LeadSource = 'Web';
+            }else{
+                lead.LeadSource = 'Phone Inquiry';
+            }
+            leadList.add(lead);
+        }
+        if(isInsert){
+            insert leadList;
+        }
+        return leadList;
+    }
 }
