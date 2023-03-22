@@ -2,77 +2,50 @@
 public class AccountTriggerHandlerTest {
     //exercise 6
     //if no zip code is provided
-    @isTest static void noZipCode(){
-        Account account = new Account(Name='Mohit');
-        insert account;
+    @isTest static void noZipCodeTest(){
+        List<Account> accountList = UtilityTest.createAccount('Demo Account', 5, true);
 
-        System.assertEquals(1, [SELECT Id FROM Account].size());
+        System.assertEquals(5, [SELECT Id FROM Account].size());
     }
     // add single account with zip code starts with 5
-    @isTest static void startsWith5(){
-        Account account = new Account(Name='Mohit', ShippingPostalCode='567');
-        insert account;
-
-        System.assertEquals(1, [SELECT Id FROM Account].size());
-    }
-    // // exercise-6 point-1
-    // // Add multiple account with zipCode starts with 5
-    @isTest static void addMultipleAccount(){
-        Account[] accounts = new Account[]{
-            new Account(Name='Mohit', ShippingPostalCode='567'),
-            new Account(Name='Mohit'),
-            new Account(Name='Mohit', ShippingPostalCode='567', Industry='Shipping'),
-            new Account(Name='Mohit', Industry='Technology')
-        };
-        insert accounts;
-        System.assertEquals(2, [SELECT Id, Industry FROM Account where Industry='Biotechnology'].size());
-    }
-
-    @isTest static void checkBulkificationOfAccounts(){
-        Account[] accounts = new Account[1000];
-        for (Integer i=0; i<1000; i++) {
-            if(i/2==0){
-                accounts[i]=new Account(Name='Mohit', ShippingPostalCode='567'+ i, Industry='Shipping');
-            }else{
-                accounts[i]=new Account(Name='Mohit', ShippingPostalCode='567' + i, Industry='Technology');
+    @isTest static void zipCodeStartsWith5(){
+        List<Account> accountList = UtilityTest.createAccount('Demo Account', 10, false);
+        for(Integer i=0; i<accountList.size(); i++){
+            if(i<5){
+                accountList[i].ShippingPostalCode='5678';
             }
         }
-        insert accounts;
+        Test.startTest();
+        List<Database.SaveResult> results = Database.insert(accountList, false);
+        Test.stopTest();
+
+        System.assertEquals(5, [SELECT Id FROM Account Where Industry='Biotechnology'].size());
     }
 
 
     // exercise-6 
     // add single account with zip code starts with 7
-    @isTest static void startsWith7(){
-        Account account = new Account(Name='Mohit');
-        insert account;
-
-        Opportunity opp = new Opportunity( AccountId= account.Id, Name='Demo', Closedate = Date.newInstance(2023,03,14), StageName='Qualification');
-        insert opp;
-
-        account.ShippingPostalCode='767';
-        update account;
-
-        System.assertEquals(1, [SELECT Id, AccountId, StageName From Opportunity Where AccountId = :account.Id and StageName = 'Closed Won'].size());
-
-    }
-
-    // Add multiple opportunities related to a single account with zipCode starts with 7
-    @isTest static void addMultipleOpp(){
-        Account account = new Account(Name='Mohit');
-        insert account;
-
-        Opportunity[] opportunities = new Opportunity[]{
-            new Opportunity( AccountId= account.Id, Name='Demo1', Closedate = Date.newInstance(2023,03,12), StageName='Prospecting'),
-            new Opportunity( AccountId= account.Id, Name='Demo2', Closedate = Date.newInstance(2023,03,15), StageName='Needs Analysis'),
-            new Opportunity( AccountId= account.Id, Name='Demo3', Closedate = Date.newInstance(2023,03,16), StageName='Qualification'),
-            new Opportunity( AccountId= account.Id, Name='Demo4', Closedate = Date.newInstance(2023,03,17), StageName='Value Proposition')
-        };
-        insert opportunities;
-
-        account.ShippingPostalCode = '7678';
-        update account;
-
-        System.assertEquals(4, [SELECT Id, AccountId, StageName From Opportunity Where AccountId = :account.Id and StageName = 'Closed Won'].size());
+    @isTest static void zipCodeStartsWith7(){
+        List<Account> accountList = UtilityTest.createAccount('Demo Account', 2, true);
+        List<Opportunity> opportunityList = UtilityTest.createOpportunity('Demo Opportunity', 10, true);
+        for(Integer i=0; i<opportunityList.size(); i++){
+            if(i<5){
+                opportunityList[i].AccountId = accountList[0].Id;
+            }else{
+                opportunityList[i].AccountId = accountList[1].Id;
+            }
+        }
+        for(Account account: accountList){
+            account.ShippingPostalCode='7893';
+        }
+        Test.startTest();
+        List<Database.SaveResult> opportunityResults = Database.update(opportunityList, false);
+        List<Database.SaveResult> accountResults = Database.update(accountList, false);
+        Test.stopTest();
+        Set<String> accountIdList = new Set<String>();
+        for(Account account : accountList){
+            accountIdList.add(account.Id);
+        }
+        System.assertEquals(10, [SELECT Id, AccountId, StageName From Opportunity Where AccountId = :accountIdList and StageName = 'Closed Won'].size());
     }
 }

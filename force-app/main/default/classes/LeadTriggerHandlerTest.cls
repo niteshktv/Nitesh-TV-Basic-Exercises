@@ -8,13 +8,8 @@ private class LeadTriggerHandlerTest{
         List<Database.SaveResult> results = Database.insert(leadList, false);
         Test.stopTest();
         for (Database.SaveResult sr : results) {
-            if (sr.isSuccess()) {
-                System.debug('Successfully inserted lead. lead ID: ' + sr.getId());
-            }
-            else {
-                // Operation failed, so get all errors                
-                for(Database.Error err : sr.getErrors()) {  
-                    System.debug(err.getMessage());                 
+            if (!sr.isSuccess()) {
+                for(Database.Error err : sr.getErrors()) {                
                     System.assertEquals(true,err.getMessage().contains('Phone should be of 10 characters'));
                 }
             }
@@ -33,13 +28,9 @@ private class LeadTriggerHandlerTest{
         List<Database.SaveResult> results = Database.insert(leadList, false);
         Test.stopTest();
         for (Database.SaveResult sr : results) {
-            if (sr.isSuccess()) {
-                System.debug('Successfully inserted lead. lead ID: ' + sr.getId());
-            }
-            else {
+            if (!sr.isSuccess()) {
                 // Operation failed, so get all errors                
-                for(Database.Error err : sr.getErrors()) {  
-                    System.debug(err.getMessage());                 
+                for(Database.Error err : sr.getErrors()) {                 
                     System.assertEquals(true,err.getMessage().contains('Phone should be of 10 characters'));
                 }
             }
@@ -57,20 +48,12 @@ private class LeadTriggerHandlerTest{
                 leadList[i].Email = 'Demo.user@gmail.com';
             }
         }
-        for(Lead lead: leadList){
-            System.debug(lead);
-        }
         Test.startTest();
         List<Database.SaveResult> results = Database.insert(leadList, false);
         Test.stopTest();
         for (Database.SaveResult sr : results) {
-            if (sr.isSuccess()) {
-                System.debug('Successfully inserted lead. lead ID: ' + sr.getId());
-            }
-            else {
-                // Operation failed, so get all errors                
-                for(Database.Error err : sr.getErrors()) {  
-                    System.debug(err.getMessage());                 
+            if (!sr.isSuccess()) {
+                for(Database.Error err : sr.getErrors()) {                 
                     System.assertEquals(true,err.getMessage().contains('Either email or phone is required'));
                 }
             }
@@ -91,21 +74,13 @@ private class LeadTriggerHandlerTest{
                 leadList[i].Email = 'guestusers@demo.free';
             }
         }
-        for(Lead lead:leadList){
-            System.debug('Lead: '+ lead);
-        }
-
         Test.startTest();
         List<Database.SaveResult> results = Database.insert(leadList, false);
         Test.stopTest();
         for (Database.SaveResult sr : results) {
-            if (sr.isSuccess()) {
-                System.debug('Successfully inserted lead. lead ID: ' + sr.getId());
-            }
-            else {
+            if (!sr.isSuccess()) {
                 // Operation failed, so get all errors                
-                for(Database.Error err : sr.getErrors()) {  
-                    System.debug(err.getMessage());                 
+                for(Database.Error err : sr.getErrors()) {                 
                     System.assertEquals(true,err.getMessage().contains('Email Can not ends with .games, .garden, .glass, .free, .talk'));
                 }
             }
@@ -128,13 +103,8 @@ private class LeadTriggerHandlerTest{
         List<Database.SaveResult> results = Database.insert(leadList, false);
         Test.stopTest();
         for (Database.SaveResult sr : results) {
-            if (sr.isSuccess()) {
-                System.debug('Successfully inserted lead. lead ID: ' + sr.getId());
-            }
-            else {
-                // Operation failed, so get all errors                
-                for(Database.Error err : sr.getErrors()) {  
-                    System.debug(err.getMessage());                 
+            if (!sr.isSuccess()) {
+                for(Database.Error err : sr.getErrors()) {                 
                     System.assertEquals(true,err.getMessage().contains('Email Can not starts with Career@, contact@, info@'));
                 }
             }
@@ -143,10 +113,9 @@ private class LeadTriggerHandlerTest{
     }
     // Exercise-3 
     // Check email length Test 
-    @isTest static void EmailLengthLessThan20(){
+    @isTest static void emailLengthLessThan20Test(){
         Lead lead = new Lead(LastName='Singh', Company='Thinkvibes', Email='Mohit@tv.com', LeadSource = 'Web');
         insert lead;
-		// System.debug([SELECT ID, Email from Lead Where Id = :lead.Id limit 1].Email); 
         System.assertEquals('mohit@tv.comz', [SELECT ID, Email from Lead Where Id = :lead.Id limit 1].Email);
     }
 
@@ -165,13 +134,9 @@ private class LeadTriggerHandlerTest{
         List<Database.SaveResult> results = Database.insert(leadList, false);
         Test.stopTest();
         for (Database.SaveResult sr : results) {
-            if (sr.isSuccess()) {
-                System.debug('Successfully inserted lead. lead ID: ' + sr.getId());
-            }
-            else {
+            if (!sr.isSuccess()) {
                 // Operation failed, so get all errors                
-                for(Database.Error err : sr.getErrors()) {  
-                    System.debug(err.getMessage());                 
+                for(Database.Error err : sr.getErrors()) {                 
                     System.assertEquals(true,err.getMessage().contains('Enter a lead source'));
                 }
             }
@@ -179,11 +144,9 @@ private class LeadTriggerHandlerTest{
         System.assertEquals(7, [Select id from Lead].size());
     }
     //Add multiple leads
-    @isTest static void addMultipleLeads(){
+    @isTest static void addCampaignToLeadTest(){
         List<Campaign> campaignList = UtilityTest.createCampaignForLead(10, true);
-        System.debug(campaignList);
         List<Lead> leadList = UtilityTest.createLeadWithMultipleLeadSource('Demo Lead',10, true);
-        
         System.assertEquals(8, [Select ID from CampaignMember].size());
     }
 
@@ -201,13 +164,9 @@ private class LeadTriggerHandlerTest{
         List<Database.SaveResult> results = Database.insert(leadList, false);
         Test.stopTest();
         for (Database.SaveResult sr : results) {
-            if (sr.isSuccess()) {
-                System.debug('Successfully inserted lead. lead ID: ' + sr.getId());
-            }
-            else {
+            if (!sr.isSuccess()) {
                 // Operation failed, so get all errors                
-                for(Database.Error err : sr.getErrors()) {  
-                    System.debug(err.getMessage());                 
+                for(Database.Error err : sr.getErrors()) {                
                     System.assertEquals(true,err.getMessage().contains('character "a" in the Lead objects Email field between the 5th character and the 12th character'));
                 }
             }
@@ -229,13 +188,9 @@ private class LeadTriggerHandlerTest{
         List<Database.SaveResult> results = Database.insert(leadList, false);
         Test.stopTest();
         for (Database.SaveResult sr : results) {
-            if (sr.isSuccess()) {
-                System.debug('Successfully inserted lead. lead ID: ' + sr.getId());
-            }
-            else {
+            if (!sr.isSuccess()) {
                 // Operation failed, so get all errors                
-                for(Database.Error err : sr.getErrors()) {  
-                    System.debug(err.getMessage());                 
+                for(Database.Error err : sr.getErrors()) {                 
                     System.assertEquals(true,err.getMessage().contains('Reason is required to save the record'));
                 }
             }

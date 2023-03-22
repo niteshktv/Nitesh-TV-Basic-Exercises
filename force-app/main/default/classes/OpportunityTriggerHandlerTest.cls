@@ -10,10 +10,7 @@ public class OpportunityTriggerHandlerTest {
         List<Database.UpsertResult> results = Database.upsert(opportunityList, false);
         Test.stopTest();
         for (Database.UpsertResult sr : results) {
-            if (sr.isSuccess()) {
-                System.debug('Successfully inserted Opportunity. opp ID: ' + sr.getId());
-            }
-            else {
+            if (!sr.isSuccess()) {
                 // Operation failed, so get all errors                
                 for(Database.Error err : sr.getErrors()) {                   
                     System.assertEquals('Next Step can not be Empty',err.getMessage());
@@ -36,10 +33,7 @@ public class OpportunityTriggerHandlerTest {
         List<Database.UpsertResult> results = Database.upsert(opportunityList, false);
         Test.stopTest();
         for (Database.UpsertResult sr : results) {
-            if (sr.isSuccess()) {
-                System.debug('Successfully inserted Opportunity. opp ID: ' + sr.getId());
-            }
-            else {
+            if (!sr.isSuccess()) {
                 // Operation failed, so get all errors                
                 for(Database.Error err : sr.getErrors()) {                   
                     System.assertEquals('Next Step can not be Empty',err.getMessage());
@@ -53,11 +47,9 @@ public class OpportunityTriggerHandlerTest {
     // Exercise-7 
     //Opportunity Stage
     @isTest static void opportunityStageSetToClosedWon(){
-        // List<Account> accountList = UtilityTest.createAccountsForOpportunity('Test', 2, true);
         Account account = new Account(Name='Mohit');
         insert account;
         List<Opportunity> opportunityList = UtilityTest.createOpportunity('Demo', 10, false);
-        // for(Integer i=0; i<accountList.size(), i++){
             for(Opportunity opportunity : opportunityList){
                 if(opportunity.StageName == 'Negotiation/Review'){
                     opportunity.NextStep = 'Next Step';
@@ -66,7 +58,6 @@ public class OpportunityTriggerHandlerTest {
                 opportunity.StageName = 'Closed Won';
             }
             insert opportunityList;
-        // }
         List<String> opportunityAccountId = new List<String>();
         for(Opportunity opportunity : opportunityList){
             opportunityAccountId.add(opportunity.AccountId);
@@ -74,18 +65,18 @@ public class OpportunityTriggerHandlerTest {
         Test.startTest();
         List<Database.UpsertResult> results = Database.upsert(opportunityList, false);
         Test.stopTest();
-        for (Database.UpsertResult sr : results) {
-            if (sr.isSuccess()) {
-                System.debug('Successfully inserted Opportunity. opp ID: ' + sr.getId());
-            }
-            else {
-                // Operation failed, so get all errors                
-                for(Database.Error err : sr.getErrors()) {      
-                    System.debug(err.getMessage());             
-                    // System.assertEquals('Next Step can not be Empty',err.getMessage());
-                }
-            }
-        }
+        // for (Database.UpsertResult sr : results) {
+        //     if (sr.isSuccess()) {
+        //         System.debug('Successfully inserted Opportunity. opp ID: ' + sr.getId());
+        //     }
+        //     else {
+        //         // Operation failed, so get all errors                
+        //         for(Database.Error err : sr.getErrors()) {      
+        //             System.debug(err.getMessage());             
+        //             // System.assertEquals('Next Step can not be Empty',err.getMessage());
+        //         }
+        //     }
+        // }
         
         System.assertEquals(10, [Select Id, AccountId from Contract where AccountId IN :opportunityAccountId].size());
     }
@@ -104,10 +95,7 @@ public class OpportunityTriggerHandlerTest {
         List<Database.UpsertResult> results = Database.upsert(opportunityList, false);
         Test.stopTest();
         for (Database.UpsertResult sr : results) {
-            if (sr.isSuccess()) {
-                // System.debug('Successfully inserted Opportunity. opp ID: ' + sr.getId());
-            }
-            else {
+            if (!sr.isSuccess()) {
                 // Operation failed, so get all errors                
                 for(Database.Error err : sr.getErrors()) {                   
                     System.assertEquals('Opportunity Close Date should fall under the current month',err.getMessage());
@@ -138,10 +126,7 @@ public class OpportunityTriggerHandlerTest {
             List<Database.UpsertResult> results = Database.upsert(opportunityList, false);
             Test.stopTest();
             for (Database.UpsertResult sr : results) {
-                if (sr.isSuccess()) {
-                    System.debug('Successfully inserted Opportunity. opp ID: ' + sr.getId());
-                }
-                else {
+                if (!sr.isSuccess()) {
                     // Operation failed, so get all errors                
                     for(Database.Error err : sr.getErrors()) {                   
                         System.assertEquals('Next Step can not be Empty',err.getMessage());

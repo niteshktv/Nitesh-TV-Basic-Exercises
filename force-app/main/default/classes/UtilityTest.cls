@@ -17,7 +17,6 @@ public with sharing class UtilityTest {
         }
         return opportunityList;
     }
-
     public static List<Lead> createLead(String Name, Integer leadCount, boolean isInsert){
         List<Lead> leadList =  new List<Lead>();
         for(Integer i=0; i<leadCount; i++){
@@ -79,7 +78,7 @@ public with sharing class UtilityTest {
 
     public static List<Campaign> createCampaignForLead(Integer campaginCount, boolean isInsert){
         List<Campaign> campaignList = new List<Campaign>();
-        for(Integer i=0; i<campaignList.size(); i++){
+        for(Integer i=0; i<campaginCount; i++){
             Campaign campagin = new Campaign();
             if(i<2){
                campagin.Name='Web';
@@ -101,7 +100,7 @@ public with sharing class UtilityTest {
     }
     public static List<Lead> createLeadWithMultipleLeadSource(String Name,Integer leadCount, boolean isInsert){
         List<Lead> leadList =  new List<Lead>();
-        for(Integer i=0; i<leadList.size(); i++){
+        for(Integer i=0; i<leadCount; i++){
             Lead lead = new Lead();
             lead.LastName = Name +i;
             lead.Company = 'Thinkvibes';
@@ -123,5 +122,18 @@ public with sharing class UtilityTest {
             insert leadList;
         }
         return leadList;
+    }
+
+    public static List<Account> createAccount(String Name, Integer accountCount, boolean isInsert){
+        List<Account> accountList = new List<Account>();
+        for(Integer i=0; i<accountCount; i++){
+            Account account = new Account();
+            account.Name=Name +i;
+            accountList.add(account);
+        }
+        if(isInsert){
+            insert accountList;
+        }
+        return accountList;
     }
 }
