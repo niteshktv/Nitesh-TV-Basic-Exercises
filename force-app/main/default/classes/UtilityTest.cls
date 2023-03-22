@@ -17,6 +17,24 @@ public with sharing class UtilityTest {
         }
         return opportunityList;
     }
+    public static List<Opportunity> createOpportunityForTask(String Name, Integer opportunityCount, boolean isInsert) {
+        List<Opportunity> opportunityList = new List<Opportunity>();
+        for(Integer i=0; i<opportunityCount; i++){
+            Opportunity opportunity = new Opportunity();
+            opportunity.Name= Name + i;
+            if(math.mod(i, 2) == 0){
+                opportunity.StageName='Qualification';
+            }else{
+                opportunity.StageName='Prospecting';
+            }
+            opportunity.CloseDate = Date.today()+1;
+            opportunityList.add(opportunity);
+        }
+        if(isInsert){
+            insert opportunityList;
+        }
+        return opportunityList;
+    }
     public static List<Lead> createLead(String Name, Integer leadCount, boolean isInsert){
         List<Lead> leadList =  new List<Lead>();
         for(Integer i=0; i<leadCount; i++){
@@ -135,5 +153,17 @@ public with sharing class UtilityTest {
             insert accountList;
         }
         return accountList;
+    }
+    public static List<Task> createtask(String Subject, Integer taskCount, boolean isInsert){
+        List<Task> taskList = new List<Task>();
+        for(Integer i=0; i<taskCount;i++){
+            Task task = new Task();
+            task.Subject = Subject;
+            taskList.add(task);
+        }
+        if(isInsert){
+            insert taskList;
+        }
+        return taskList;
     }
 }

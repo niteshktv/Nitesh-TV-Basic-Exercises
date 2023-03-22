@@ -1,3 +1,3 @@
-trigger UserTrigger on User (before insert, before update, after insert, after update) {
+trigger UserTrigger on User (after insert) {
     UserTriggerHandler.addProfileToQueue(Trigger.new);
 }
