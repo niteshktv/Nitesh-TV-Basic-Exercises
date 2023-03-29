@@ -48,9 +48,6 @@ public with sharing class UtilityTest {
             }
             leadList.add(lead);
         }
-        if(isInsert){
-            insert leadList;
-        }
         return leadList;
     }
     public static List<Lead> createLeadWithCountryUnitedStates(String Name, Integer leadCount, boolean isInsert){
@@ -69,9 +66,6 @@ public with sharing class UtilityTest {
             }
             leadList.add(lead);
         }
-        if(isInsert){
-            insert leadList;
-        }
         return leadList;
     }
 
@@ -87,9 +81,6 @@ public with sharing class UtilityTest {
                 lead.Email = 'mohit.guestuser@info.tv'+i;
             }
             leadList.add(lead);
-        }
-        if(isInsert){
-            insert leadList;
         }
         return leadList;
     }

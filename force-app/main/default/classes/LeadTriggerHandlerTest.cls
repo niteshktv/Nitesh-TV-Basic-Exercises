@@ -14,6 +14,7 @@ private class LeadTriggerHandlerTest{
                 }
             }
         }
+        // assert records where country is united states and phone number length is 10
         System.assertEquals(5, [Select id, Country__c from Lead where Country__c='United States'].size());
     }
 
@@ -35,6 +36,7 @@ private class LeadTriggerHandlerTest{
                 }
             }
         }
+        //assert records where country is other than United States
         System.assertEquals(10, [Select id, Country__c from Lead where Country__c='India'].size());
     }
     // Either phone or email is required to save the record
@@ -58,7 +60,8 @@ private class LeadTriggerHandlerTest{
                 }
             }
         }
-        System.assertEquals(8, [Select id, Country__c from Lead].size());
+        // either phone number is provided or not.
+        System.assertEquals(8, [Select id from Lead].size());
     }
 
     // Exercise-2 Point-1
@@ -109,11 +112,12 @@ private class LeadTriggerHandlerTest{
                 }
             }
         }
+        // assert successful insert records where email not starts with Career@, contact@, info@ Test
         System.assertEquals(7, [Select id from Lead].size());
     }
     // Exercise-3 
     // Check email length Test 
-    @isTest static void emailLengthLessThan20Test(){
+    @isTest static void appendZForEmailLessThen20CharTest(){
         Lead lead = new Lead(LastName='Singh', Company='Thinkvibes', Email='Mohit@tv.com', LeadSource = 'Web');
         insert lead;
         System.assertEquals('mohit@tv.comz', [SELECT ID, Email from Lead Where Id = :lead.Id limit 1].Email);
@@ -141,6 +145,7 @@ private class LeadTriggerHandlerTest{
                 }
             }
         }
+        //assert successful insert records where lead source is given
         System.assertEquals(7, [Select id from Lead].size());
     }
     //Add multiple leads
@@ -171,6 +176,7 @@ private class LeadTriggerHandlerTest{
                 }
             }
         }
+        //assert successful insert records where lead leads email does not contains character a in between
         System.assertEquals(5, [Select id from Lead].size());
     }
     //Exercise-11 

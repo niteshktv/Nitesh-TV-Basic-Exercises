@@ -12,12 +12,11 @@ public with sharing class UserTriggerHandlerTest {
         TimeZoneSidKey='America/Los_Angeles',
         UserName=uniqueUserName);
         insert u;
-        Id userId = u.id;
         //Get the group you want. Queues are stored as group objects with a type of Queue
         List<Group> g = [select Id from Group where Name='Marketing Hot Leads' AND Type = 'Queue'];
         List<QueueSobject> queueSobject =[Select QueueId from QueueSObject Where SobjectType='Lead' limit 1];
         GroupMember member = new GroupMember();
-        member.UserOrGroupId = userId;
+        member.UserOrGroupId = u.id;
         member.GroupId = g[0].Id;
 
         insert member;

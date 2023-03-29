@@ -1,13 +1,13 @@
 @isTest
 public class AccountTriggerHandlerTest {
     //exercise 6
-    //if no zip code is provided
+    // accounts with no zip code. so there in no changes with industry and related opportunity
     @isTest static void noZipCodeTest(){
         List<Account> accountList = UtilityTest.createAccount('Demo Account', 5, true);
 
         System.assertEquals(5, [SELECT Id FROM Account].size());
     }
-    // add single account with zip code starts with 5
+    // add single account with zip code starts with 5 than change industry to Biotechnology
     @isTest static void zipCodeStartsWith5(){
         List<Account> accountList = UtilityTest.createAccount('Demo Account', 10, false);
         for(Integer i=0; i<accountList.size(); i++){
@@ -42,10 +42,10 @@ public class AccountTriggerHandlerTest {
         List<Database.SaveResult> opportunityResults = Database.update(opportunityList, false);
         List<Database.SaveResult> accountResults = Database.update(accountList, false);
         Test.stopTest();
-        Set<String> accountIdList = new Set<String>();
+        Set<Id> accountIdSet = new Set<Id>();
         for(Account account : accountList){
-            accountIdList.add(account.Id);
+            accountIdSet.add(account.Id);
         }
-        System.assertEquals(10, [SELECT Id, AccountId, StageName From Opportunity Where AccountId = :accountIdList and StageName = 'Closed Won'].size());
+        System.assertEquals(10, [SELECT Id, AccountId, StageName From Opportunity Where AccountId = :accountList and StageName = 'Closed Won'].size());
     }
 }
